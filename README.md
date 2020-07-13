@@ -6,7 +6,7 @@ Steps to run app:
 
 api available on url : http://localhost:3333/
 
-basic authorization
-user: user
-password: user
+basic authorization:
+user: user;
+password: user;
 
