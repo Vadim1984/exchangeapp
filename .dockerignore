@@ -1,0 +1,5 @@
+# exclude not needed files and dirs for building image:
+build
+.idea
+.git*
+db-init

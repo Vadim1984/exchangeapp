@@ -1,0 +1,276 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Сервис обмена валют. Позволяет задавать комиссию за обмен по каждой валютной паре и получать курсы валют. На основании этих данных сервис позволяет получать суммы для прямого и обратного обмена валют.",
+    "version": "1.0",
+    "title": "Exchange service",
+    "contact": {
+      "email": "s.vasnev@advcash.com"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "commissions",
+      "description": "Значения комиссий взимаемых при обмене валют. Значение процента комиссии можно задать для кажой влаютной пары. Валидные значения в диапазоне от 0.00 до 100.00."
+    },
+    {
+      "name": "exchange",
+      "description": "Обмен валют. Позволяет получать информацию по суммам при прямом и обратном обмене валют с учетом комисии. Пример прямого обмена: обменять 100 USD на EUR, в этом случае запрос должен соержать объект вида: {\"amountFrom\": 100.00,\"currencyFrom\": \"USD\",\"currencyTo\": \"EUR\",\"operationType\":\"GIVE\"}. В ответ должен вернуться полностью заполненый объект. Пример обратного обмена: узнать сколько нужно USD для того чтобы получить в результате обмена 100 EUR, в этом случае запрос должен содержать объект вида: {\"amountTo\": 100.00,\"currencyFrom\": \"USD\",\"currencyTo\": \"EUR\",\"operationType\":\"GET\"}"
+    },
+    {
+      "name": "exchange-rates",
+      "description": "Значение курсов обмена валют. Ползволяют получать список курсов обмена валют для всех валютных пар."
+    }
+  ],
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "paths": {
+    "/api/commissions": {
+      "get": {
+        "tags": [
+          "commissions"
+        ],
+        "summary": "Получить список установленных комиссий",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Commission"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "commissions"
+        ],
+        "summary": "Установить значение комиссии для валютной пары",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "commission",
+            "description": "commission",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Commission"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Commission"
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/exchange": {
+      "post": {
+        "tags": [
+          "exchange"
+        ],
+        "summary": "Запрос обмена валют",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "exchangeRequest",
+            "description": "exchangeRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExchangeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExchangeRequest"
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/exchange-rates": {
+      "get": {
+        "tags": [
+          "exchange-rates"
+        ],
+        "summary": "Получить все курсы обмена валют",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ExchangeRate"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Commission": {
+      "type": "object",
+      "properties": {
+        "commissionPt": {
+          "type": "number"
+        },
+        "from": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        },
+        "to": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        }
+      },
+      "title": "Commission"
+    },
+    "ExchangeRate": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        },
+        "rate": {
+          "type": "number"
+        },
+        "to": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        }
+      },
+      "title": "ExchangeRate"
+    },
+    "ExchangeRequest": {
+      "type": "object",
+      "properties": {
+        "amountFrom": {
+          "type": "number"
+        },
+        "amountTo": {
+          "type": "number"
+        },
+        "currencyFrom": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        },
+        "currencyTo": {
+          "type": "string",
+          "enum": [
+            "EUR",
+            "USD",
+            "UAH",
+            "RUB"
+          ]
+        },
+        "operationType": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "GIVE"
+          ]
+        }
+      },
+      "title": "ExchangeRequest"
+    }
+  }
+}
