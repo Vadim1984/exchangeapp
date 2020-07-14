@@ -11,6 +11,8 @@ import com.example.exchangeapp.facades.ExchangeRateFacade;
 import com.example.exchangeapp.models.CommissionModel;
 import com.example.exchangeapp.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -52,6 +54,7 @@ public class DefaultExchangeRateFacade implements ExchangeRateFacade {
                 .collect(toList());
     }
 
+    @CacheEvict(cacheNames="rates", allEntries=true)
     @Override
     public ExchangeRequestDto exchange(ExchangeRequestDto exchangeRequest) {
         List<ExchangeRateDto> exchangeRates = getExchangeRates();
@@ -83,5 +86,4 @@ public class DefaultExchangeRateFacade implements ExchangeRateFacade {
 
         return exchangeRequest;
     }
-
 }
