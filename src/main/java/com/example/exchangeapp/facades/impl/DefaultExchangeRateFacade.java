@@ -2,13 +2,13 @@ package com.example.exchangeapp.facades.impl;
 
 import com.example.exchangeapp.constants.ExchangeAppConstants;
 import com.example.exchangeapp.dto.CommissionDto;
+import com.example.exchangeapp.dto.ExchangeRateDto;
 import com.example.exchangeapp.dto.ExchangeRequestDto;
 import com.example.exchangeapp.dto.privatbank.PrivatBankExchangeRateDto;
 import com.example.exchangeapp.enums.Currency;
 import com.example.exchangeapp.enums.OperationType;
 import com.example.exchangeapp.facades.ExchangeRateFacade;
 import com.example.exchangeapp.models.CommissionModel;
-import com.example.exchangeapp.dto.ExchangeRateDto;
 import com.example.exchangeapp.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;

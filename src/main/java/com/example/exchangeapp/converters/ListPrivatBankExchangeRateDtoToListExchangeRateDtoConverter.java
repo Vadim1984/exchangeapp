@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class PrivatBankExchangeRateDtoToExchangeRateDtoConverter
+public class ListPrivatBankExchangeRateDtoToListExchangeRateDtoConverter
         implements Converter<List<PrivatBankExchangeRateDto>, List<ExchangeRateDto>> {
 
     @Override

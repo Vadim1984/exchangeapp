@@ -3,11 +3,12 @@ package com.example.exchangeapp.services.impl;
 import com.example.exchangeapp.dao.CommissionRepository;
 import com.example.exchangeapp.dto.privatbank.PrivatBankExchangeRateDto;
 import com.example.exchangeapp.enums.Currency;
-import com.example.exchangeapp.exceptions.PrivatBankApiUnavailableException;
+import com.example.exchangeapp.exceptions.PrivatBankApiException;
 import com.example.exchangeapp.models.CommissionModel;
 import com.example.exchangeapp.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class DefaultExchangeRateService implements ExchangeRateService {
     @Autowired
     private CommissionRepository commisionRepository;
 
+    @Cacheable("rates")
     @Override
     public List<PrivatBankExchangeRateDto> getExchangeRates() {
         RestTemplate restClient = new RestTemplate();
@@ -40,7 +42,7 @@ public class DefaultExchangeRateService implements ExchangeRateService {
 
             return response.getBody();
         } catch (RestClientException exception) {
-            throw new PrivatBankApiUnavailableException(exception);
+            throw new PrivatBankApiException(exception);
         }
     }
 

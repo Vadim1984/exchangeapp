@@ -1,6 +1,6 @@
 package com.example.exchangeapp.handler;
 
-import com.example.exchangeapp.exceptions.PrivatBankApiUnavailableException;
+import com.example.exchangeapp.exceptions.PrivatBankApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,8 @@ public class ExchangeExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errors, headers, status, request);
     }
 
-    @ExceptionHandler(PrivatBankApiUnavailableException.class)
-    public ResponseEntity<Object> handlePrivatBankApiUnavailable(PrivatBankApiUnavailableException ex, WebRequest request){
+    @ExceptionHandler(PrivatBankApiException.class)
+    public ResponseEntity<Object> handlePrivatBankApiUnavailable(PrivatBankApiException ex, WebRequest request){
         Map<String, String> errors = new HashMap<>();
 
         errors.put(DESCRIPTION, "currently service is unavailable, please try later.");
