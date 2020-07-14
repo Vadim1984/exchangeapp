@@ -11,6 +11,7 @@ public class CommissionModelToCommissionDtoConverter implements Converter<Commis
         target.setCommissionPt(source.getCommission());
         target.setFrom(source.getFrom());
         target.setTo(source.getTo());
+
         return target;
     }
 }

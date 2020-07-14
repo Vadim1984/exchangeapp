@@ -3,26 +3,28 @@ package com.example.exchangeapp.dto;
 import com.example.exchangeapp.enums.Currency;
 import com.example.exchangeapp.enums.OperationType;
 
+import java.math.BigDecimal;
+
 public class ExchangeRequestDto {
-    private double amountFrom;
-    private double amountTo;
+    private BigDecimal amountFrom;
+    private BigDecimal amountTo;
     private Currency currencyFrom;
     private Currency currencyTo;
     private OperationType operationType;
 
-    public double getAmountFrom() {
+    public BigDecimal getAmountFrom() {
         return amountFrom;
     }
 
-    public void setAmountFrom(double amountFrom) {
+    public void setAmountFrom(BigDecimal amountFrom) {
         this.amountFrom = amountFrom;
     }
 
-    public double getAmountTo() {
+    public BigDecimal getAmountTo() {
         return amountTo;
     }
 
-    public void setAmountTo(double amountTo) {
+    public void setAmountTo(BigDecimal amountTo) {
         this.amountTo = amountTo;
     }
 

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity(name = "commission")
 public class CommissionModel {
@@ -14,7 +16,7 @@ public class CommissionModel {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "rate")
-    private double commission;
+    private BigDecimal commission;
     @Column(name = "commission_from")
     private Currency from;
     @Column(name = "commission_to")
@@ -24,11 +26,11 @@ public class CommissionModel {
         return id;
     }
 
-    public double getCommission() {
+    public BigDecimal getCommission() {
         return commission;
     }
 
-    public void setCommission(double commission) {
+    public void setCommission(BigDecimal commission) {
         this.commission = commission;
     }
 
@@ -47,4 +49,5 @@ public class CommissionModel {
     public void setTo(Currency to) {
         this.to = to;
     }
+
 }

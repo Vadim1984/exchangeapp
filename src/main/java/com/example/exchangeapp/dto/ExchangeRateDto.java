@@ -2,11 +2,12 @@ package com.example.exchangeapp.dto;
 
 import com.example.exchangeapp.enums.Currency;
 
+import java.math.BigDecimal;
+
 public class ExchangeRateDto {
     private Currency from;
     private Currency to;
-    private double buyRate;
-    private double saleRate;
+    private BigDecimal rate;
 
     public Currency getFrom() {
         return from;
@@ -24,19 +25,11 @@ public class ExchangeRateDto {
         this.to = to;
     }
 
-    public double getBuyRate() {
-        return buyRate;
+    public BigDecimal getRate() {
+        return rate;
     }
 
-    public void setBuyRate(double buyRate) {
-        this.buyRate = buyRate;
-    }
-
-    public double getSaleRate() {
-        return saleRate;
-    }
-
-    public void setSaleRate(double saleRate) {
-        this.saleRate = saleRate;
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
     }
 }

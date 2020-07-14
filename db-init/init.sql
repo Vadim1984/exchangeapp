@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS commission (
     id INT AUTO_INCREMENT PRIMARY KEY,
     commission_from VARCHAR(10),
     commission_to VARCHAR(10),
-    rate DOUBLE
+    rate DECIMAL(10,2)
 );

@@ -2,11 +2,13 @@ package com.example.exchangeapp.dto.privatbank;
 
 import com.example.exchangeapp.enums.Currency;
 
+import java.math.BigDecimal;
+
 public class PrivatBankExchangeRateDto {
     private Currency ccy;
     private Currency base_ccy;
-    private double buy;
-    private double sale;
+    private BigDecimal buy;
+    private BigDecimal sale;
 
     public Currency getCcy() {
         return ccy;
@@ -24,19 +26,19 @@ public class PrivatBankExchangeRateDto {
         this.base_ccy = base_ccy;
     }
 
-    public double getBuy() {
+    public BigDecimal getBuy() {
         return buy;
     }
 
-    public void setBuy(double buy) {
+    public void setBuy(BigDecimal buy) {
         this.buy = buy;
     }
 
-    public double getSale() {
+    public BigDecimal getSale() {
         return sale;
     }
 
-    public void setSale(double sale) {
+    public void setSale(BigDecimal sale) {
         this.sale = sale;
     }
 }

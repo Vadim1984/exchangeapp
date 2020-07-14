@@ -3,6 +3,7 @@ package com.example.exchangeapp.services.impl;
 import com.example.exchangeapp.dao.CommissionRepository;
 import com.example.exchangeapp.dto.privatbank.PrivatBankExchangeRateDto;
 import com.example.exchangeapp.enums.Currency;
+import com.example.exchangeapp.exceptions.PrivatBankApiUnavailableException;
 import com.example.exchangeapp.models.CommissionModel;
 import com.example.exchangeapp.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +31,17 @@ public class DefaultExchangeRateService implements ExchangeRateService {
     @Override
     public List<PrivatBankExchangeRateDto> getExchangeRates() {
         RestTemplate restClient = new RestTemplate();
-        ResponseEntity<List<PrivatBankExchangeRateDto>> response =
-                restClient.exchange(exchangeUrl, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<PrivatBankExchangeRateDto>>() {
-                        });
-        return response.getBody();
+
+        try {
+            ResponseEntity<List<PrivatBankExchangeRateDto>> response =
+                    restClient.exchange(exchangeUrl, HttpMethod.GET, null,
+                            new ParameterizedTypeReference<List<PrivatBankExchangeRateDto>>() {
+                            });
+
+            return response.getBody();
+        } catch (RestClientException exception) {
+            throw new PrivatBankApiUnavailableException(exception);
+        }
     }
 
     @Override
@@ -61,35 +70,13 @@ public class DefaultExchangeRateService implements ExchangeRateService {
     }
 
     @Override
-    public double findCommissionByCurrencyFromAndCurrencyTo(Currency from, Currency to) {
-        double commission = 0;
+    public BigDecimal findCommissionByCurrencyFromAndCurrencyTo(Currency from, Currency to) {
         CommissionModel commissionModel = commisionRepository.findByFromAndTo(from, to);
+
         if (commissionModel != null) {
-            commission = commissionModel.getCommission();
+            return commissionModel.getCommission();
         }
-        return commission;
+
+        return BigDecimal.ZERO;
     }
-
-    @Override
-    public double exchange(Currency currencyFrom, Currency currencyTo, double amountInCurrencyFrom) {
-        double commission = findCommissionByCurrencyFromAndCurrencyTo(currencyFrom, currencyTo);
-
-        List<PrivatBankExchangeRateDto> exchangeRates = getExchangeRates();
-
-        double saleCurrencyRate = exchangeRates.stream()
-                .filter(rate -> currencyFrom.equals(rate.getCcy()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Currency " + currencyFrom + " is not supported"))
-                .getBuy();
-
-        double buyCurrencyRate = exchangeRates.stream()
-                .filter(rate -> currencyTo.equals(rate.getCcy()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Currency " + currencyTo + " is not supported"))
-                .getSale();
-
-        final double amountInCurrencyTo = amountInCurrencyFrom * saleCurrencyRate / buyCurrencyRate;
-        return amountInCurrencyTo - amountInCurrencyTo * commission / 100;
-    }
-
 }

@@ -4,6 +4,7 @@ import com.example.exchangeapp.dto.privatbank.PrivatBankExchangeRateDto;
 import com.example.exchangeapp.enums.Currency;
 import com.example.exchangeapp.models.CommissionModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ExchangeRateService {
@@ -36,17 +37,7 @@ public interface ExchangeRateService {
     /**
      * @param from currency
      * @param to currency
-     * @return commission double value
+     * @return commission BigDecimal value
      */
-    double findCommissionByCurrencyFromAndCurrencyTo(Currency from, Currency to);
-
-    /**
-     * Perform conversion amount from one currency into another currency
-     *
-     * @param currencyFrom  - source currency which need to be converted.
-     * @param currencyTo - target currency which need to be converted.
-     * @param amountInCurrencyFrom - source currency amount.
-     * @return - target currency amount.
-     */
-    double exchange(Currency currencyFrom, Currency currencyTo, double amountInCurrencyFrom);
+    BigDecimal findCommissionByCurrencyFromAndCurrencyTo(Currency from, Currency to);
 }
