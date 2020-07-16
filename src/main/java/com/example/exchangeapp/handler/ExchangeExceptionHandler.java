@@ -1,6 +1,6 @@
 package com.example.exchangeapp.handler;
 
-import com.example.exchangeapp.exceptions.PrivatBankApiException;
+import com.example.exchangeapp.exceptions.ExchangeException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ public class ExchangeExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String DESCRIPTION = "description";
 
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -35,11 +36,11 @@ public class ExchangeExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errors, headers, status, request);
     }
 
-    @ExceptionHandler(PrivatBankApiException.class)
-    public ResponseEntity<Object> handlePrivatBankApiUnavailable(PrivatBankApiException ex, WebRequest request){
+    @ExceptionHandler(ExchangeException.class)
+    public ResponseEntity<Object> handlePrivatBankApiUnavailable(ExchangeException ex, WebRequest request){
         Map<String, String> errors = new HashMap<>();
 
-        errors.put(DESCRIPTION, "currently service is unavailable, please try later.");
+        errors.put(DESCRIPTION, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.BAD_GATEWAY);
     }
 }

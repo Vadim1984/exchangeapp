@@ -3,7 +3,7 @@ package com.example.exchangeapp.services.impl;
 import com.example.exchangeapp.dao.CommissionRepository;
 import com.example.exchangeapp.dto.privatbank.PrivatBankExchangeRateDto;
 import com.example.exchangeapp.enums.Currency;
-import com.example.exchangeapp.exceptions.PrivatBankApiException;
+import com.example.exchangeapp.exceptions.ExchangeException;
 import com.example.exchangeapp.models.CommissionModel;
 import com.example.exchangeapp.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class DefaultExchangeRateService implements ExchangeRateService {
 
             return response.getBody();
         } catch (RestClientException exception) {
-            throw new PrivatBankApiException(exception);
+            throw new ExchangeException("currently service is unavailable, please try later.");
         }
     }
 
