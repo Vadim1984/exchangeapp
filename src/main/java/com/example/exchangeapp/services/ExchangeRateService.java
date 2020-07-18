@@ -40,4 +40,7 @@ public interface ExchangeRateService {
      * @return commission BigDecimal value
      */
     BigDecimal findCommissionByCurrencyFromAndCurrencyTo(Currency from, Currency to);
+
+    BigDecimal calculateGiveOperationAmount(BigDecimal amountFrom, BigDecimal rate, BigDecimal commission);
+    BigDecimal calculateGetOperationAmount(BigDecimal amountTo, BigDecimal rate, BigDecimal commission);
 }

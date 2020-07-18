@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.exchangeapp.constants.ExchangeAppConstants.*;
+
 @Service
 public class DefaultExchangeRateService implements ExchangeRateService {
 
@@ -81,4 +83,28 @@ public class DefaultExchangeRateService implements ExchangeRateService {
 
         return BigDecimal.ZERO;
     }
+
+    public BigDecimal calculateGiveOperationAmount(BigDecimal amountFrom, BigDecimal rate, BigDecimal commission){
+        BigDecimal targetAmount = amountFrom
+                .multiply(rate);
+
+        BigDecimal totalCommission = targetAmount
+                .multiply(commission)
+                .divide(ONE_HUNDRED, RATES_SCALE, ROUNDING_MODE);
+
+        return targetAmount
+                .subtract(totalCommission)
+                .setScale(AMOUNT_SCALE, ROUNDING_MODE);
+    }
+
+    public BigDecimal calculateGetOperationAmount(BigDecimal amountTo, BigDecimal rate, BigDecimal commission){
+
+        return amountTo
+                .multiply(ONE_HUNDRED)
+                .divide(rate.multiply(ONE_HUNDRED)
+                                .subtract(rate.multiply(commission))
+                        ,AMOUNT_SCALE, ROUNDING_MODE
+                );
+    }
+
 }

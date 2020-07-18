@@ -65,30 +65,11 @@ public class DefaultExchangeRateFacade implements ExchangeRateFacade {
         ExchangeRateDto exchangeRateDto = filterRate(exchangeRates, currencyFrom, currencyTo);
 
         if (OperationType.GIVE.equals(exchangeRequest.getOperationType())) {
-
-            BigDecimal targetAmount = exchangeRequest.getAmountFrom()
-                    .multiply(exchangeRateDto.getRate());
-
-            BigDecimal totalCommission = targetAmount.multiply(commission).divide(ONE_HUNDRED, RATES_SCALE, ROUNDING_MODE);
-
-            BigDecimal totalWithCommission = targetAmount
-                    .subtract(totalCommission)
-                    .setScale(AMOUNT_SCALE, ROUNDING_MODE);
-
-            exchangeRequest.setAmountTo(totalWithCommission);
+            BigDecimal total = exchangeRateService.calculateGiveOperationAmount(exchangeRequest.getAmountFrom(), exchangeRateDto.getRate(), commission);
+            exchangeRequest.setAmountTo(total);
         } else if (OperationType.GET.equals(exchangeRequest.getOperationType())) {
-            BigDecimal amountTo = exchangeRequest.getAmountTo();
-            BigDecimal rate = exchangeRateDto.getRate();
-
-
-            BigDecimal totalWithCommission = amountTo
-                    .multiply(ONE_HUNDRED)
-                    .divide(rate.multiply(ONE_HUNDRED)
-                                    .subtract(rate.multiply(commission))
-                            ,AMOUNT_SCALE, ROUNDING_MODE
-                    );
-
-            exchangeRequest.setAmountFrom(totalWithCommission);
+            BigDecimal total = exchangeRateService.calculateGetOperationAmount(exchangeRequest.getAmountTo(), exchangeRateDto.getRate(), commission);
+            exchangeRequest.setAmountFrom(total);
         }
 
         return exchangeRequest;
