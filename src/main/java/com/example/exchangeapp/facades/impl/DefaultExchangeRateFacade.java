@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,13 +28,12 @@ public class DefaultExchangeRateFacade implements ExchangeRateFacade {
     @Autowired
     private ConversionService conversionService;
     @Autowired
-    private GenericConversionService genericConversionService;
-    @Autowired
     private ExchangeRateService exchangeRateService;
 
     @Override
     public List<ExchangeRateDto> getExchangeRates() {
         final List<PrivatBankExchangeRateDto> exchangeRates = exchangeRateService.getExchangeRates();
+
         final TypeDescriptor sourceTypeDescriptor = TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(PrivatBankExchangeRateDto.class));
         final TypeDescriptor targetTypeDescriptor = TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(ExchangeRateDto.class));
 
